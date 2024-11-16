@@ -5,14 +5,14 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            inputValue: '',        // Bind to the text input
-            changedValue: ''     // Stores the submitted text
+            packageName: '',        // Bind to the text input
+            changedPackageName: ''     // Stores the submitted text
         };
     },
     methods: {
         handleChange() {
-            this.changedValue = this.inputValue;
-            console.log("Changed Value:", this.changedValue);
+            this.changedPackageName = this.packageName;
+            console.log("Changed Value:", this.changedPackageName);
         },
         debouncedHandleChange: debounce(function() {
             this.handleChange();
@@ -27,11 +27,11 @@ export default {
         <div id="title">NPM Dependency Graph</div>
 
         <div>
-            <input type="text" v-model="inputValue" @input="debouncedHandleChange" placeholder="npm package (ie. express)"/>
+            <input type="text" v-model="packageName" @input="debouncedHandleChange" placeholder="npm package (ie. express)"/>
             <!-- <button @click="handleSubmit">Submit</button> -->
         </div>
 
-        <div v-if="changedValue">{{ changedValue }}</div>
+        <div v-if="changedPackageName">{{ changedPackageName }}</div>
     </div>
 </template>
 

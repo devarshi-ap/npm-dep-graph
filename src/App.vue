@@ -1,7 +1,5 @@
 <script setup lang="ts">
-// @ts-ignore
 import LeftPanel from './components/LeftPanel.vue'
-// @ts-ignore
 import RightPanel from './components/RightPanel.vue'
 </script>
 

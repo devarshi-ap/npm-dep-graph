@@ -4,22 +4,27 @@ import debounce from 'lodash.debounce';
 import axios from 'axios';
 import { ref } from 'vue';
 import { usePackage } from '../stores/selectedPackage.ts';
-
 // type interface for the response JSON
 interface PackageItem {
     package: {
         name: string;
-        version: string;
     };
 }
 
 // Reactive state
 const packageName = ref('');
 const changedPackageName = ref('');
+
 const packageData = ref<PackageItem[] | null>(null);
 const totalResults = ref(0);
+
 const error = ref('');
 const loading = ref(false);
+
+const hasSelectedPackage = ref(false);
+
+const packageVersions = ref<string[]>([]); // Holds the list of versions
+const selectedVersion = ref<string | null>(null); // Tracks the selected version
 
 // Access shared store
 const { updatePackage } = usePackage();
@@ -29,7 +34,7 @@ const { updatePackage } = usePackage();
 const fetchPackageData = async () => {
     if (!packageName.value.trim()) {
         packageData.value = null;
-        error.value = '';
+        hasSelectedPackage.value = false;
         return;
     }
 
@@ -43,6 +48,7 @@ const fetchPackageData = async () => {
     } catch (err) {
         error.value = "Failed to fetch package data from registry.";
         packageData.value = null;
+        hasSelectedPackage.value = false;
     } finally {
         loading.value = false;
     }
@@ -55,8 +61,31 @@ const debouncedHandleChange = debounce(() => {
     console.log(packageData.value);
 }, 500);
 
-const handleClick = (pname: string, pversion: string) => {
-    updatePackage(pname, pversion);
+// Function to fetch package details
+const fetchPackageVersions = async () => {
+    try {
+        const response = await axios.get(`https://registry.npmjs.org/${packageName.value}`);
+        packageVersions.value = Object.keys(response.data.versions);
+    } catch (err) {
+        error.value = `Failed to fetch versions for ${packageName.value}.`;
+        packageVersions.value = [];
+    } finally {
+        loading.value = false;
+    }
+};
+
+// Handle version selection
+const handleVersionSelect = () => {
+    if (packageName.value && selectedVersion.value) {
+        updatePackage(packageName.value, selectedVersion.value)
+        console.log(`Package: ${packageName.value}\nVersion: ${selectedVersion.value}`);
+    }
+}
+
+const handleClick = () => {
+    hasSelectedPackage.value = true;
+    fetchPackageVersions();
+    selectedVersion.value = null; // Reset selected version when package changes
 };
 </script>
 
@@ -74,17 +103,27 @@ const handleClick = (pname: string, pversion: string) => {
         </div>
 
         <div v-if="loading">Loading...</div>
-        <div id="total-results" v-if="packageData">{{ totalResults }} Total Results</div>
+        <div class="subheading" v-if="packageData">[{{ totalResults }} Total Results]</div>
 
         <div id="results">
         <a
             v-if="packageData"
             v-for="item in packageData"
             :key="item.package.name"
-            @click="handleClick(item.package.name, item.package.version)"
+            @click="handleClick"
         >
-            {{ item.package.name }} - {{ item.package.version }}
+            {{ item.package.name }}
         </a>
+        </div>
+
+        <div v-if="hasSelectedPackage">
+            <div v-if="packageVersions.length > 0">
+                <label class="subheading" for="version-select">Select a Version:</label>
+                <select id="version-select" v-model="selectedVersion" @change="handleVersionSelect">
+                    <option value="" disabled>Select a version</option>
+                    <option v-for="version in packageVersions" :key="version" :value="version">{{ version }}</option>
+                </select>
+            </div>
         </div>
 
         <div v-if="error">{{ error }}</div>
@@ -93,11 +132,11 @@ const handleClick = (pname: string, pversion: string) => {
 
 <style scoped>
 #left-container > * {
-    margin: 1rem;
+    margin: 1.5rem;
 }
 
-#total-results {
-    font-size: 85%;
+.subheading {
+    font-size: 0.8rem;
 }
 
 #results {
@@ -113,5 +152,34 @@ const handleClick = (pname: string, pversion: string) => {
 
 #results *:hover {
     text-shadow: rgba(221, 224, 172, 0.9) 0px 0px 12px;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+select {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+a:hover {
+    transform: scale(1.1); /* Scale up to 1.5x */
+}
+
+#version-select {
+    width: 30%;
+    font-size: 85%;
+    font-weight: 200;
 }
 </style>

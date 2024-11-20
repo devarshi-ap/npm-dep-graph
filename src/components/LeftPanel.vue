@@ -78,7 +78,6 @@ const fetchPackageVersions = async () => {
 const handleVersionSelect = () => {
     if (packageName.value && selectedVersion.value) {
         updatePackage(packageName.value, selectedVersion.value)
-        console.log(`Package: ${packageName.value}\nVersion: ${selectedVersion.value}`);
     }
 }
 

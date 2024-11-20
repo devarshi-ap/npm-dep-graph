@@ -21,26 +21,41 @@ const client = axios.create({
     baseURL: 'https://registry.npmjs.org',
 });
 
-interface dependency {
+export interface dependency {
     dependencyName: string;
     dependencyVersion: string;
 }
 
-type npmPackage = {
+export type npmPackage = {
     packageName: string,
     packageVersion: string,
     isDeprecated: boolean,
     dependencies: dependency[] | null
 };
 
-export async function getDependencies(packageName: string, packageVersion: string): Promise<any> {
+export async function getDependencies(packName: string, packVersion: string): Promise<npmPackage | null> {
     try {
-        const response = await client.get(`/${packageName}/${packageVersion}`);
+        const response = await client.get(`/${packName}/${packVersion}`);
+        
+        let deps: dependency[] = []
+        Object.entries(response.data.dependencies).forEach(([key, value]) => {
+            // @ts-ignore
+            let baseVersion = value.replace(/^~/, '')
+            deps.push({ dependencyName: key, dependencyVersion: baseVersion })
+        })
 
-        console.log(`${packageName} - ${packageVersion}`);
-        console.log('deprecated' in response.data ? "deprecated" : "not deprecated");
-        console.log(response.data.dependencies)
+        let packageObject: npmPackage = {
+            packageName: packName,
+            packageVersion: packVersion,
+            isDeprecated: 'deprecated' in response.data ? true : false,
+            dependencies: deps,
+        };
+
+        console.log(packageObject)
+
+        return packageObject;
     } catch (err) {
         console.log(err);
+        return null
     }
 }

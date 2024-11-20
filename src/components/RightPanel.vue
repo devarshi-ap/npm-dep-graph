@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 // import axios from 'axios';
 import { usePackage } from '../stores/selectedPackage';
-import { getDependencies } from '../services/dependencyGraph';
+import { getDependencies, npmPackage } from '../services/dependencyGraph';
 
 const { packageName, packageVersion } = usePackage();
 
+const packDeps = ref<npmPackage | null>(null);
+
 watch(packageVersion, () => {
     console.log(`Package: ${packageName.value}\nVersion: ${packageVersion.value}`);
+    // @ts-ignore
     getDependencies(packageName.value, packageVersion.value)
+        .then(result => {
+            packDeps.value = result;
+        })
+        .catch(err => {
+            console.log(err);
+        })
 })
 
 // });
@@ -17,6 +26,7 @@ watch(packageVersion, () => {
 <template>
     <div id="right-panel">
         <div>{{ packageName }} - {{ packageVersion }}</div>
+        <div v-if="packDeps">{{ packDeps }}</div>
     </div>
 </template>
 

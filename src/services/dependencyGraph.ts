@@ -1,33 +1,38 @@
-import axios from 'axios';
-import { dependency, npmPackage } from '../types/dependencyGraphTypes';
+class DependencyNode {
+    name: string;
+    version: string;
+    isDeprecated: boolean;
+    dependencies: DependencyNode[];
 
-const client = axios.create({
-    baseURL: 'https://registry.npmjs.org',
-});
+    constructor(name: string, version: string, deprecated: boolean = false) {
+        this.name = name;
+        this.version = version;
+        this.isDeprecated = deprecated;
+        this.dependencies = [];
+    }
+}
 
-export async function getDependencies(packName: string, packVersion: string): Promise<npmPackage | null> {
-    try {
-        const response = await client.get(`/${packName}/${packVersion}`);
+class DependencyGraph {
+    nodes: Map<string, DependencyNode>
+
+    constructor() {
+        // empty Graph
+        this.nodes = new Map()
+    }
+
+    // introduce new package into graph
+    addNode(name: string, version: string, deprecated: boolean = false): DependencyNode {
+        const key = `${name}@${version}`;
         
-        let deps: dependency[] = []
-        Object.entries(response.data.dependencies).forEach(([key, value]) => {
-            // @ts-ignore
-            let baseVersion = value.replace(/^~/, '')
-            deps.push({ dependencyName: key, dependencyVersion: baseVersion })
-        })
+        // add new mapping key->DepNode if key not in map already
+        if(!this.nodes.has(key)) {
+            this.nodes.set(key, new DependencyNode(name, version, deprecated));
+        }
+        return this.nodes.get(key)!;
+    }
 
-        let packageObject: npmPackage = {
-            packageName: packName,
-            packageVersion: packVersion,
-            isDeprecated: 'deprecated' in response.data ? true : false,
-            dependencies: deps,
-        };
-
-        console.log(packageObject)
-
-        return packageObject;
-    } catch (err) {
-        console.log(err);
-        return null
+    // define dependencies relationship in graph (A depends on B == A is parent of B)
+    addEdge(parent: DependencyNode, child: DependencyNode) {
+        parent.dependencies.push(child);
     }
 }

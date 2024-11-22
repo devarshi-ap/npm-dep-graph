@@ -4,18 +4,13 @@ import debounce from 'lodash.debounce';
 import axios from 'axios';
 import { ref } from 'vue';
 import { usePackage } from '../stores/selectedPackage.ts';
-// type interface for the response JSON
-interface PackageItem {
-    package: {
-        name: string;
-    };
-}
+
 
 // Reactive state
 const packageName = ref('');
 const changedPackageName = ref('');
 
-const packageData = ref<PackageItem[] | null>(null);
+const packageData = ref<{ package: { name: string } }[] | null>(null);
 const totalResults = ref(0);
 
 const error = ref('');

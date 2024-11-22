@@ -1,37 +1,9 @@
 import axios from 'axios';
-
-/**
- * Parameters: packageName, packageVersion
- * Return: that package's logical dependency graph (JSON object)
- * 
- * JSON schema:
- * {
- *      packageName: string,
- *      packageVersion: string,
- *      isDeprecated: boolean
- *      dependencies: [{
- *          depName: string,
- *          depVersion: string,
- *          isDeprecated: boolean,
- *      }, ...]
- * }
- */
+import { dependency, npmPackage } from '../types/dependencyGraphTypes';
 
 const client = axios.create({
     baseURL: 'https://registry.npmjs.org',
 });
-
-export interface dependency {
-    dependencyName: string;
-    dependencyVersion: string;
-}
-
-export type npmPackage = {
-    packageName: string,
-    packageVersion: string,
-    isDeprecated: boolean,
-    dependencies: dependency[] | null
-};
 
 export async function getDependencies(packName: string, packVersion: string): Promise<npmPackage | null> {
     try {

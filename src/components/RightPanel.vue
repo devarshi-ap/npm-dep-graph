@@ -2,7 +2,7 @@
 import { watch, ref } from 'vue';
 // import axios from 'axios';
 import { usePackage } from '../stores/selectedPackage';
-import { getDependencies } from '../services/dependencyGraph';
+import { getDependencies } from '../services/apiService';
 import { npmPackage } from '../types/dependencyGraphTypes';
 
 const { packageName, packageVersion } = usePackage();

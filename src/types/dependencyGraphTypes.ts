@@ -9,14 +9,3 @@ export type npmPackage = {
     isDeprecated: boolean;
     dependencies: dependency[] | null;
 };
-
-// interface graphNode {
-//     packageName: string;
-//     packageVersion: string;
-//     isDeprecated: boolean;
-//     dependencies: {
-//         packageName: string;
-//         packageVersion: string;
-//         isDeprecated: boolean;
-//     }[];
-// }

@@ -39,14 +39,12 @@ export class DependencyGraph {
         console.log("Dependency Graph:");
 
         for (const [key, node] of this.nodes) {
-            console.log(`\nNode: ${node.name}@${node.version}`);
-            console.log(`  Deprecated: ${node.isDeprecated}`);
-            console.log("  Dependencies:");
+            console.log(`${node.name}@${node.version}\nDeprecated: ${node.isDeprecated}\nDependencies:`);
             if (node.dependencies.length === 0) {
-                console.log("    None");
+                console.log("> 0 Dependencies");
             } else {
                 for (const dep of node.dependencies) {
-                    console.log(`    - ${dep.name}@${dep.version}`);
+                    console.log(`> ${dep.name}@${dep.version}`);
                 }
             }
         }

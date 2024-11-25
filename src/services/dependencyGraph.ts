@@ -38,7 +38,7 @@ export class DependencyGraph {
     logGraph(): void {
         console.log("Dependency Graph:");
 
-        for (const [key, node] of this.nodes) {
+        for (const [_, node] of this.nodes) {
             console.log(`${node.name}@${node.version}\nDeprecated: ${node.isDeprecated}\nDependencies:`);
             if (node.dependencies.length === 0) {
                 console.log("> 0 Dependencies");

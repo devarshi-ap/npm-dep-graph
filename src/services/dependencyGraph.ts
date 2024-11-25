@@ -1,5 +1,6 @@
 import { getDependencies } from "./apiService";
 import { cleanVersion } from "../utils";
+import { graphData } from "../types/dependencyGraphTypes";
 
 export class DependencyNode {
     name: string;
@@ -51,6 +52,18 @@ export class DependencyGraph {
     }
 }
 
+export function exportAsGraphData(depGraph: Map<string, DependencyNode>): graphData[] {
+    const depGraphData: graphData[] = [];
+    depGraph.forEach((node, key) => {
+        for (const dep of node.dependencies) {
+            // Create edges for the graphData array
+            const targetKey = `${dep.name}@${dep.version}`;
+            depGraphData.push({ source: key, target: targetKey });
+        }
+    });
+    return depGraphData;
+}
+
 export async function buildDependencyGraph(packageName: string, packageVersion: string) {
     const depGraph = new DependencyGraph();
     const processedPackages = new Set<string>();
@@ -88,5 +101,6 @@ export async function buildDependencyGraph(packageName: string, packageVersion: 
 
     await addDependenciesRecursively(packageName, packageVersion);
     depGraph.logGraph();
+    
     return depGraph;
 }

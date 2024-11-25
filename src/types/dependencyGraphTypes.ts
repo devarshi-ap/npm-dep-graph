@@ -9,3 +9,8 @@ export type npmPackage = {
     isDeprecated: boolean;
     dependencies: dependency[] | null;
 };
+
+export interface graphData {
+    source: string,
+    target: string
+}

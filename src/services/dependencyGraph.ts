@@ -1,6 +1,6 @@
 import { getDependencies } from "./apiService";
 import { cleanVersion } from "../utils";
-import { graphData } from "../types/dependencyGraphTypes";
+import { graphType, graphNode, graphLinks } from "../types/dependencyGraphTypes";
 
 
 export class DependencyNode {
@@ -53,13 +53,14 @@ export class DependencyGraph {
     }
 }
 
-export function exportAsGraphData(depGraph: Map<string, DependencyNode>): graphData[] {
-    const depGraphData: graphData[] = [];
+export function exportAsGraphData(depGraph: Map<string, DependencyNode>): graphType {
+    const depGraphData: graphType = {nodes: [], links: []};
     depGraph.forEach((node, key) => {
+        depGraphData.nodes.push({ id: key, name: node.name, val: 1 });
         for (const dep of node.dependencies) {
             // Create edges for the graphData array
             const targetKey = `${dep.name}@${dep.version}`;
-            depGraphData.push({ source: key, target: targetKey });
+            depGraphData.links.push({ source: key, target: targetKey });
         }
     });
     return depGraphData;

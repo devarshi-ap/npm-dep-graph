@@ -10,7 +10,18 @@ export type npmPackage = {
     dependencies: dependency[] | null;
 };
 
-export interface graphData {
+
+export type graphNode = {
+    id: string,
+    name: string,
+    val: 1
+}
+export interface graphLinks {
     source: string,
     target: string
+}
+
+export interface graphType {
+    nodes: graphNode[],
+    links: graphLinks[],
 }

@@ -4,21 +4,7 @@ import { watch, ref } from 'vue';
 import { usePackage } from '../stores/selectedPackage';
 import { buildDependencyGraph, DependencyGraph, exportAsGraphData } from '../services/dependencyGraph';
 import { npmPackage } from '../types/dependencyGraphTypes';
-import { VNetworkGraph } from "v-network-graph";
-import "v-network-graph/lib/style.css";
-
-const nodes = {
-    node1: { name: "Node 1" },
-    node2: { name: "Node 2" },
-    node3: { name: "Node 3" },
-    node4: { name: "Node 4" },
-}
-
-const edges = {
-    edge1: { source: "node1", target: "node2" },
-    edge2: { source: "node2", target: "node3" },
-    edge3: { source: "node3", target: "node4" },
-}
+import ForceGraph from 'force-graph';
 
 const { packageName, packageVersion } = usePackage();
 
@@ -34,6 +20,11 @@ watch(packageVersion, () => {
             const d3Data = exportAsGraphData(result.nodes);
             makeGraphFlag.value = true
             console.log(d3Data);
+
+            const myGraph = ForceGraph();
+            myGraph(document.getElementById('graph')!)
+                .graphData(d3Data)
+                .linkDirectionalArrowLength(6);
         });
     })
 </script>
@@ -44,13 +35,7 @@ watch(packageVersion, () => {
         <div>{{ packageName }} - {{ packageVersion }}</div>
         <div v-if="packDeps">{{ packDeps }}</div>
         <hr />
-        <div v-if="makeGraphFlag">
-            <VNetworkGraph
-                class="graph"
-                :nodes="nodes"
-                :edges="edges"
-            />
-        </div>
+        <div id="graph"></div>
     </div>
 </template>
 
@@ -60,9 +45,7 @@ watch(packageVersion, () => {
     padding: 1rem;
 }
 
-.graph {
-    width: 800px;
-    height: 600px;
-    border: 1px solid #000;
+#graph {
+    background-color: aliceblue;
 }
 </style>

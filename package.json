@@ -12,6 +12,7 @@
     "axios": "^1.7.7",
     "d3": "^7.9.0",
     "lodash.debounce": "^4.0.8",
+    "v-network-graph": "^0.9.18",
     "vue": "^3.5.12"
   },
   "devDependencies": {

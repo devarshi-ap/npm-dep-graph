@@ -2,6 +2,7 @@ import { getDependencies } from "./apiService";
 import { cleanVersion } from "../utils";
 import { graphData } from "../types/dependencyGraphTypes";
 
+
 export class DependencyNode {
     name: string;
     version: string;

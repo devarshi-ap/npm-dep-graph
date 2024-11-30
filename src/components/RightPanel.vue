@@ -3,12 +3,10 @@ import { watch, ref } from 'vue';
 // import axios from 'axios';
 import { usePackage } from '../stores/selectedPackage';
 import { buildDependencyGraph, DependencyGraph, exportAsGraphData } from '../services/dependencyGraph';
-import { npmPackage } from '../types/dependencyGraphTypes';
 import ForceGraph from 'force-graph';
 
 const { packageName, packageVersion } = usePackage();
 
-const packDeps = ref<npmPackage | null>(null);
 // @ts-ignore
 const depGraph = ref<DependencyGraph | null>(null);
 

@@ -53,18 +53,21 @@ export class DependencyGraph {
     }
 }
 
-export function exportAsGraphData(depGraph: Map<string, DependencyNode>): graphType {
-    const depGraphData: graphType = {nodes: [], links: []};
+export function exportAsGraphData(depGraph: Map<string, DependencyNode>, rootId: string): graphType {
+    const depGraphData: graphType = { nodes: [], links: [] };
     depGraph.forEach((node, key) => {
-        depGraphData.nodes.push({ id: key, name: node.name, val: 1 });
+        depGraphData.nodes.push({
+            id: key,
+            group: node.isDeprecated ? 1 : 0,
+            isRoot: key === rootId // Mark root node
+        });
         for (const dep of node.dependencies) {
-            // Create edges for the graphData array
-            const targetKey = `${dep.name}@${dep.version}`;
-            depGraphData.links.push({ source: key, target: targetKey });
+            depGraphData.links.push({ source: key, target: `${dep.name}@${dep.version}` });
         }
     });
     return depGraphData;
 }
+
 
 export async function buildDependencyGraph(packageName: string, packageVersion: string) {
     const depGraph = new DependencyGraph();

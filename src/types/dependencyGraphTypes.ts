@@ -13,8 +13,8 @@ export type npmPackage = {
 
 export type graphNode = {
     id: string,
-    name: string,
-    val: 1
+    group: number,
+    isRoot: boolean,
 }
 export interface graphLinks {
     source: string,

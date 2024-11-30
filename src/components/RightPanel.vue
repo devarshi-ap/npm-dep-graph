@@ -22,12 +22,16 @@ watch(packageVersion, () => {
             const myGraph = ForceGraph();
             myGraph(document.getElementById('graph')!)
                 .graphData(d3Data)
-                .linkDirectionalArrowLength(4) // Smaller arrows (default is 6)
-                .linkDirectionalArrowRelPos(0.5) // Position arrows in the middle of the link
-                .linkDirectionalArrowColor(link => {
-                    // Optional: Customize arrow color
+                .linkColor((link) => {
+                    // Check if the target node is deprecated
                     const targetNode = d3Data.nodes.find(node => node.id === link.target);
-                    return targetNode?.group === 1 ? 'red' : '#999'; // Red for deprecated, default for others
+                    return targetNode?.group == 1 ? 'red' : 'white'; // Red for deprecated nodes, white otherwise
+                })
+                .linkDirectionalArrowLength(4) // Smaller arrows (default is 6)
+                .linkDirectionalArrowRelPos(0.9) // Position arrows in the middle of the link
+                .linkDirectionalArrowColor(link => {
+                    const targetNode = d3Data.nodes.find(node => node.id === link.target);
+                    return targetNode?.group == 1 ? 'red' : 'white'; // Red for deprecated, default for others
                 })
                 .nodeCanvasObject((node, ctx, globalScale) => {
                     const label = node.id;
@@ -36,7 +40,7 @@ watch(packageVersion, () => {
 
                     // Measure text dimensions
                     const textWidth = ctx.measureText(label).width;
-                    const padding = 4; // Padding around the text
+                    const padding = 1; // Padding around the text
                     const bckgDimensions = [textWidth + padding * 2, fontSize + padding * 2];
 
                     // Draw background rectangle
@@ -52,6 +56,8 @@ watch(packageVersion, () => {
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = node.group === 1 ? 'red' : 'black'; // Change text color for deprecated nodes
+                    if (node.isRoot) ctx.fillStyle = 'green'; // green for root node
+
                     ctx.fillText(label, node.x, node.y);
 
                     // Save background dimensions for interactivity (optional)
@@ -70,6 +76,11 @@ watch(packageVersion, () => {
                         );
                     }
                 })
+                .nodeRelSize(10)  // Increase the relative node size
+                .zoom(2) // Initial zoom level
+                .maxZoom(5)  // Maximum zoom level
+                .minZoom(0.5)  // Minimum zoom level
+                .centerAt(0, 0, 500);  // Center the graph with padding
         });
     })
 </script>
@@ -78,7 +89,9 @@ watch(packageVersion, () => {
 <template>
     <div id="right-panel">
         <div>{{ packageName }} - {{ packageVersion }}</div>
-        <div id="graph"></div>
+        <div id="graph-container">
+            <div id="graph"></div>
+        </div>
     </div>
 </template>
 
@@ -88,7 +101,14 @@ watch(packageVersion, () => {
     padding: 1rem;
 }
 
+#graph-container {
+  width: 100%; /* Full width of the parent container */
+  height: 50vh; /* Half the viewport height */
+  position: relative; /* For proper scaling */
+}
+
 #graph {
-    background-color: aliceblue;
+  width: 100%;
+  height: 100%;
 }
 </style>

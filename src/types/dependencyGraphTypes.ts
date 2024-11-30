@@ -10,12 +10,12 @@ export type npmPackage = {
     dependencies: dependency[] | null;
 };
 
-
 export type graphNode = {
     id: string,
     group: number,
     isRoot: boolean,
 }
+
 export interface graphLinks {
     source: string,
     target: string

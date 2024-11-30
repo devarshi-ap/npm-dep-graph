@@ -1,29 +1,22 @@
 <script setup lang="ts">
-// @ts-ignore
 import debounce from 'lodash.debounce';
 import axios from 'axios';
 import { ref } from 'vue';
 import { usePackage } from '../stores/selectedPackage.ts';
 
-
 // Reactive state
 const packageName = ref('');
 const changedPackageName = ref('');
-
 const packageData = ref<{ package: { name: string } }[] | null>(null);
 const totalResults = ref(0);
-
 const error = ref('');
 const loading = ref(false);
-
 const hasSelectedPackage = ref(false);
-
 const packageVersions = ref<string[]>([]); // Holds the list of versions
 const selectedVersion = ref<string | null>(null); // Tracks the selected version
 
 // Access shared store
 const { updatePackage } = usePackage();
-
 
 // Methods
 const fetchPackageData = async () => {
@@ -41,7 +34,7 @@ const fetchPackageData = async () => {
         totalResults.value = response.data.total;
         packageData.value = response.data.results.slice(0, 5);
     } catch (err) {
-        error.value = "Failed to fetch package data from registry.";
+        error.value = 'Failed to fetch package data from registry.';
         packageData.value = null;
         hasSelectedPackage.value = false;
     } finally {
@@ -52,15 +45,17 @@ const fetchPackageData = async () => {
 const debouncedHandleChange = debounce(() => {
     changedPackageName.value = packageName.value;
     fetchPackageData();
-    console.log("Changed Value:", changedPackageName.value);
+    console.log('Changed Value:', changedPackageName.value);
     console.log(packageData.value);
 }, 500);
 
 // Function to fetch package details
 const fetchPackageVersions = async () => {
+    loading.value = true;
     try {
         const response = await axios.get(`https://registry.npmjs.org/${packageName.value}`);
         packageVersions.value = Object.keys(response.data.versions);
+        selectedVersion.value = null; // Reset version selection when package changes
     } catch (err) {
         error.value = `Failed to fetch versions for ${packageName.value}.`;
         packageVersions.value = [];
@@ -72,14 +67,23 @@ const fetchPackageVersions = async () => {
 // Handle version selection
 const handleVersionSelect = () => {
     if (packageName.value && selectedVersion.value) {
-        updatePackage(packageName.value, selectedVersion.value)
+        updatePackage(packageName.value, selectedVersion.value);
+        regenerateGraph(); // Regenerate the graph when a new version is selected
     }
-}
+};
 
 const handleClick = () => {
     hasSelectedPackage.value = true;
     fetchPackageVersions();
-    selectedVersion.value = null; // Reset selected version when package changes
+};
+
+// Function to regenerate the graph after a version is selected
+const regenerateGraph = () => {
+    if (selectedVersion.value) {
+        // Implement graph regeneration logic here with the selected package and version
+        console.log(`Regenerating graph for ${packageName.value} ${selectedVersion.value}`);
+        // You can call a function to update the graph, e.g., `updateGraph(packageName.value, selectedVersion.value);`
+    }
 };
 </script>
 
@@ -111,13 +115,13 @@ const handleClick = () => {
         </div>
 
         <div v-if="hasSelectedPackage">
-            <div v-if="packageVersions.length > 0">
-                <label class="subheading" for="version-select">Select a Version:</label>
-                <select id="version-select" v-model="selectedVersion" @change="handleVersionSelect">
-                    <option value="" disabled>Select a version</option>
-                    <option v-for="version in packageVersions" :key="version" :value="version">{{ version }}</option>
-                </select>
-            </div>
+        <div v-if="packageVersions.length > 0">
+            <label class="subheading" for="version-select">Select a Version:</label>
+            <select id="version-select" v-model="selectedVersion" @change="handleVersionSelect">
+            <option value="" disabled>Select a version</option>
+            <option v-for="version in packageVersions" :key="version" :value="version">{{ version }}</option>
+            </select>
+        </div>
         </div>
 
         <div v-if="error">{{ error }}</div>

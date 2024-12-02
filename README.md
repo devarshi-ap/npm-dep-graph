@@ -2,7 +2,7 @@
 
 
 <h1 align="center">
-  drake.rest
+  NPM Dependency Graph
   <br>
   banner here
   <br>

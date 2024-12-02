@@ -1,6 +1,5 @@
 # NPM Dependency Graph
 
-
 <h1 align="center">
   NPM Dependency Graph
   <br>

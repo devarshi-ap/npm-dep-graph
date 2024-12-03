@@ -19,9 +19,7 @@
   <a href="#tech-specs">Tech Specs</a> •
 </p>
 
-
 Demo video
-
 
 ## Key Features
 

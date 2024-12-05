@@ -16,7 +16,7 @@
 <p align="center">
   <a href="#key-features">Key Features</a> •
   <a href="#usage">Usage</a> •
-  <a href="#tech-specs">Tech Specs</a> •
+  <a href="#tech-specs">Tech Specs</a>
 </p>
 
 Demo video

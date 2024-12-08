@@ -23,7 +23,7 @@ Demo video
 
 ## Key Features
 
-* im getting railed by school work
+* im getting railed by school work fr
 * but ill still find time to play ball cuz hoop dreams yk
 * why the fuck do I need to know automated first-order-logic formula resolution
 * i spend more time worrying if my vancouver hiking trip will fall thru than my homework

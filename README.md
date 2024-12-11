@@ -10,7 +10,7 @@
 <h4 align="center">One liner project overview</h4>
 
 <p align="center">
-    dev-ops badges
+    Dev-ops Badges
 </p>
 
 <p align="center">

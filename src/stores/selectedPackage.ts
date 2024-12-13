@@ -4,16 +4,21 @@ import { ref } from "vue";
 const packageName = ref('');
 const packageVersion = ref('');
 
-function updatePackage(newName: string, newVersion: string) {
-  packageName.value = newName;
+function updateName(newName: string) {
+    packageName.value = newName;
+    console.log('updated name!')
+}
+
+function updateVersion(newVersion: string) {
   packageVersion.value = newVersion;
-  console.log('updated!');
+  console.log('updated version!');
 }
 
 export function usePackage() {
   return {
     packageName,
     packageVersion,
-    updatePackage,
+    updateName,
+    updateVersion
   };
 }

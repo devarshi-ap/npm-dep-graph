@@ -5,7 +5,7 @@ import { ref } from 'vue';
 import { usePackage } from '../stores/selectedPackage.ts';
 
 // Reactive state
-const packageName = ref('');
+const inputPackageName = ref('');
 const changedPackageName = ref('');
 const packageData = ref<{ package: { name: string } }[] | null>(null);
 const totalResults = ref(0);
@@ -16,11 +16,11 @@ const packageVersions = ref<string[]>([]); // Holds the list of versions
 const selectedVersion = ref<string | null>(null); // Tracks the selected version
 
 // Access shared store
-const { updatePackage } = usePackage();
+const { updateName, updateVersion, packageName, packageVersion } = usePackage();
 
 // Methods
 const fetchPackageData = async () => {
-    if (!packageName.value.trim()) {
+    if (!inputPackageName.value.trim()) {
         packageData.value = null;
         hasSelectedPackage.value = false;
         return;
@@ -30,7 +30,7 @@ const fetchPackageData = async () => {
     error.value = '';
 
     try {
-        const response = await axios.get(`https://api.npms.io/v2/search?q=${packageName.value}`);
+        const response = await axios.get(`https://api.npms.io/v2/search?q=${inputPackageName.value}`);
         totalResults.value = response.data.total;
         packageData.value = response.data.results.slice(0, 5);
     } catch (err) {
@@ -43,7 +43,7 @@ const fetchPackageData = async () => {
 };
 
 const debouncedHandleChange = debounce(() => {
-    changedPackageName.value = packageName.value;
+    changedPackageName.value = inputPackageName.value;
     fetchPackageData();
     console.log('Changed Value:', changedPackageName.value);
     console.log(packageData.value);
@@ -66,14 +66,17 @@ const fetchPackageVersions = async () => {
 
 // Handle version selection
 const handleVersionSelect = () => {
-    if (packageName.value && selectedVersion.value) {
-        updatePackage(packageName.value, selectedVersion.value);
+    if (selectedVersion.value) {
+        updateVersion(selectedVersion.value);
         regenerateGraph(); // Regenerate the graph when a new version is selected
     }
 };
 
-const handleClick = () => {
+const handleClick = (event: MouseEvent) => {
     hasSelectedPackage.value = true;
+    const target = (event.target as HTMLElement).textContent!;
+    updateName(target);
+    console.log(`selected ${target}!`);
     fetchPackageVersions();
 };
 
@@ -81,7 +84,7 @@ const handleClick = () => {
 const regenerateGraph = () => {
     if (selectedVersion.value) {
         // Implement graph regeneration logic here with the selected package and version
-        console.log(`Regenerating graph for ${packageName.value} ${selectedVersion.value}`);
+        console.log(`Regenerating graph for ${packageName.value} ${packageVersion.value}`);
         // You can call a function to update the graph, e.g., `updateGraph(packageName.value, selectedVersion.value);`
     }
 };
@@ -94,7 +97,7 @@ const regenerateGraph = () => {
         <div>
         <input
             type="text"
-            v-model="packageName"
+            v-model="inputPackageName"
             @input="debouncedHandleChange"
             placeholder="npm package (ie. express)"
         />
@@ -104,24 +107,25 @@ const regenerateGraph = () => {
         <div class="subheading" v-if="packageData">[{{ totalResults }} Total Results]</div>
 
         <div id="results">
-        <a
-            v-if="packageData"
-            v-for="item in packageData"
-            :key="item.package.name"
-            @click="handleClick"
-        >
-            {{ item.package.name }}
-        </a>
+            <a
+                v-if="packageData"
+                v-for="item in packageData"
+                :key="item.package.name"
+                @click="handleClick($event)"
+                :class="{ selected: packageName === item.package.name }"
+            >
+                {{ item.package.name }}
+            </a>
         </div>
 
         <div v-if="hasSelectedPackage">
-        <div v-if="packageVersions.length > 0">
-            <label class="subheading" for="version-select">Select a Version:</label>
-            <select id="version-select" v-model="selectedVersion" @change="handleVersionSelect">
-            <option value="" disabled>Select a version</option>
-            <option v-for="version in packageVersions" :key="version" :value="version">{{ version }}</option>
-            </select>
-        </div>
+            <div v-if="packageVersions.length > 0">
+                <label class="subheading" for="version-select">Select a Version:</label>
+                <select id="version-select" v-model="selectedVersion" @change="handleVersionSelect">
+                <option value="" disabled>Select a version</option>
+                <option v-for="version in packageVersions" :key="version" :value="version">{{ version }}</option>
+                </select>
+            </div>
         </div>
 
         <div v-if="error">{{ error }}</div>
@@ -168,11 +172,18 @@ p {
 
 a {
     cursor: pointer;
-    transition: transform 0.5s ease;
+    text-decoration: none; /* Remove default underline */
+    transition: transform 0.5s ease, text-decoration-color 0.3s ease;
 }
 
 a:hover {
-    transform: scale(1.1); /* Scale up to 1.5x */
+    transform: scale(1.1); /* Scale up slightly */
+}
+
+a.selected {
+    text-decoration: underline; /* Add underline */
+    text-decoration-color: yellow; /* Set underline color to yellow */
+    text-decoration-thickness: 3px; /* Optional: make the underline thicker */
 }
 
 #version-select {

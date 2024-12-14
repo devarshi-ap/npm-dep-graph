@@ -21,6 +21,8 @@ watch(packageVersion, () => {
 
             const myGraph = ForceGraph();
             myGraph(document.getElementById('graph')!)
+                .width(document.getElementById('graph')!.clientWidth) // Match parent width
+                .height(document.getElementById('graph')!.clientHeight) // Match parent height
                 .graphData(d3Data)
                 .linkColor((link) => {
                     // Check if the target node is deprecated
@@ -81,7 +83,15 @@ watch(packageVersion, () => {
                 .maxZoom(5)  // Maximum zoom level
                 .minZoom(0.5)  // Minimum zoom level
                 .centerAt(0, 0, 500);  // Center the graph with padding
-        });
+
+                // Handle resizing dynamically
+                window.addEventListener('resize', () => {
+                    const graphElement = document.getElementById('graph'); // Dynamically get the element
+                    if (graphElement) {
+                        myGraph.width(graphElement.clientWidth).height(graphElement.clientHeight);
+                    }
+                });
+            });
     })
 </script>
 
@@ -99,16 +109,25 @@ watch(packageVersion, () => {
 <style scoped>
 #right-panel {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #graph-container {
-  width: 100%; /* Full width of the parent container */
-  height: 50vh; /* Half the viewport height */
-  position: relative; /* For proper scaling */
+  width: 100%; /* Fill the parent horizontally */
+  height: calc(100vh - 100px); /* Adjust to fit within viewport height */
+  position: relative;
+  overflow: hidden; /* Prevent the graph from rendering outside bounds */
+  border: 1px solid whitesmoke;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #graph {
-  width: 100%;
-  height: 100%;
+  width: 100%; /* Match the container width */
+  height: 100%; /* Match the container height */
 }
 </style>

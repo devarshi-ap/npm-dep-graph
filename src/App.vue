@@ -13,14 +13,20 @@ import RightPanel from './components/RightPanel.vue'
 <style scoped>
 .container {
     display: flex;
-    height: 100vh;
+    height: 100vh; /* Full viewport height */
+    width: 100vw;  /* Full viewport width */
+    box-sizing: border-box; /* Include padding/borders in width & height */
 }
 
 .left-panel {
-    flex: 1;
+    flex: 1; /* Take 1 part of the flex space */
+    overflow: auto; /* Allow content to scroll if overflowing */
 }
 
 .right-panel {
-    flex: 3;
+    flex: 3; /* Take 3 parts of the flex space */
+    background-color: rgb(126, 100, 136); /* Optional: For visual debugging */
+    overflow: hidden; /* Prevent content overflow */
 }
+
 </style>

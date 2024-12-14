@@ -76,6 +76,7 @@ const handleClick = (event: MouseEvent) => {
     hasSelectedPackage.value = true;
     const target = (event.target as HTMLElement).textContent!;
     updateName(target);
+    updateVersion('');
     console.log(`selected ${target}!`);
     fetchPackageVersions();
 };
@@ -133,6 +134,7 @@ const regenerateGraph = () => {
 </template>
 
 <style scoped>
+
 #left-container > * {
     margin: 1.5rem;
 }

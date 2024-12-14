@@ -32,7 +32,7 @@ const fetchPackageData = async () => {
     try {
         const response = await axios.get(`https://api.npms.io/v2/search?q=${inputPackageName.value}`);
         totalResults.value = response.data.total;
-        packageData.value = response.data.results.slice(0, 5);
+        packageData.value = response.data.results.slice(0, 10);
     } catch (err) {
         error.value = 'Failed to fetch package data from registry.';
         packageData.value = null;

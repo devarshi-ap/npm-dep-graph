@@ -127,7 +127,7 @@ watch(packageVersion, () => {
 }
 
 #graph {
-  width: 100%; /* Match the container width */
-  height: 100%; /* Match the container height */
+  width: 100%; /* Match container width */
+  height: 100%; /* Match container height */
 }
 </style>

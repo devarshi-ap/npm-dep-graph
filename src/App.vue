@@ -25,7 +25,7 @@ import RightPanel from './components/RightPanel.vue'
 
 .right-panel {
     flex: 3; /* Take 3 parts of the flex space */
-    background-color: rgb(126, 100, 136); /* Optional: For visual debugging */
+    background-color: rgb(100, 132, 136); /* Optional: For visual debugging */
     overflow: hidden; /* Prevent content overflow */
 }
 

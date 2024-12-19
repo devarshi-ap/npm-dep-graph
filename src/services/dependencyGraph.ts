@@ -1,6 +1,6 @@
 import { getDependencies } from "./apiService";
 import { cleanVersion } from "../utils";
-import { graphType, graphNode, graphLinks } from "../types/dependencyGraphTypes";
+import { graphType } from "../types/dependencyGraphTypes";
 
 
 export class DependencyNode {

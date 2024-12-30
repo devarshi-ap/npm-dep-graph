@@ -1,4 +1,4 @@
-name: Run Test
+name: Project CI
 
 on:
     push:

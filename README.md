@@ -10,7 +10,7 @@
 <h4 align="center">One liner project overview</h4>
 
 <p align="center">
-    <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Run+Test%22"><img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Run%20Test/badge.svg" alt="Run Test"></a>
+    <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Run+Test%22"><img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Project%20CI/badge.svg" alt="Run Test"></a>
     <a href="#license"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
 </p>
 

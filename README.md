@@ -10,7 +10,9 @@
 <h4 align="center">One liner project overview</h4>
 
 <p align="center">
-    Dev-ops Badges
+    <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Run+Test%22"><img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Run%20Test/badge.svg" alt="Run Test"></a>
+    <a href="https://github.com/devarshi-ap/npm-dep-graph/releases/"><img src="https://img.shields.io/github/tag/devarshi-ap/npm-dep-graph?include_prereleases=&sort=semver&color=blue" alt="GitHub tag"></a>
+    <a href="#license"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
 </p>
 
 <p align="center">
@@ -23,19 +25,20 @@ Demo video
 
 ## Key Features
 
-* im getting railed by school work fr
-* but ill still find time to play ball cuz hoop dreams yk
-* why the fuck do I need to know automated first-order-logic formula resolution
-* i spend more time worrying if my vancouver hiking trip will fall thru than my homework
-* i gotta research on this idea to start a company in the little software/tech-in-energy niche sector
+-   im getting railed by school work fr
+-   but ill still find time to play ball cuz hoop dreams yk
+-   why the fuck do I need to know automated first-order-logic formula resolution
+-   i spend more time worrying if my vancouver hiking trip will fall thru than my homework
+-   i gotta research on this idea to start a company in the little software/tech-in-energy niche sector
 
 ## Usage
 
-* dw cuh, ill drop the tutorial as soon as I fix the gaping issues in the service
+-   dw cuh, ill drop the tutorial as soon as I fix the gaping issues in the service
 
 <br />
 
 ###### $ Dev. Setup
+
 Ensure [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) are installed on your machine. From your command line:
 
 ```bash
@@ -55,6 +58,7 @@ $ npm run dev
 ## Tech Specs
 
 Here's the toolkit I chose, and my rationale as to why:
+
 <div style="display: inline">
     <img src="https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white">
     <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB">

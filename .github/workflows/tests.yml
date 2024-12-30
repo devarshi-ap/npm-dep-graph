@@ -9,7 +9,7 @@ on:
             - 'main'
 
 jobs:
-    hello:
+    Run-Test:
         runs-on: ubuntu-latest
 
         steps:

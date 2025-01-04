@@ -54,11 +54,13 @@ watch(packageVersion, (newVersion) => {
 
             console.log(d3Data);
 
+            //@ts-ignore
             const myGraph = ForceGraph();
             myGraph(document.getElementById('graph')!)
                 .width(document.getElementById('graph')!.clientWidth) // Match parent width
                 .height(document.getElementById('graph')!.clientHeight) // Match parent height
                 .graphData(d3Data)
+                // @ts-ignore
                 .linkColor((link) => {
                     // Check if the target node is deprecated
                     const targetNode = d3Data.nodes.find(node => node.id === link.target);
@@ -66,7 +68,7 @@ watch(packageVersion, (newVersion) => {
                 })
                 .linkDirectionalArrowLength(4) // Smaller arrows (default is 6)
                 .linkDirectionalArrowRelPos(0.9) // Position arrows in the middle of the link
-                .nodeCanvasObject((node, ctx, globalScale) => {
+                .nodeCanvasObject((node: NodeObject, ctx: CanvasRenderingContext2D, globalScale: number) => {
                     // cast node as CustomNodeObject (which extends force-graph nodeObject) to resolve property DNE errors
                     const customNode = node as CustomNodeObject;
                     const label = String(customNode.id);
@@ -105,7 +107,7 @@ watch(packageVersion, (newVersion) => {
                     // Save background dimensions for interactivity (optional)
                     customNode.__bckgDimensions = bckgDimensions;
                 })
-                .nodePointerAreaPaint((node, color, ctx) => {
+                .nodePointerAreaPaint((node: NodeObject, color: string, ctx: CanvasRenderingContext2D) => {
                     // cast node as CustomNodeObject (which extends force-graph nodeObject) to resolve property DNE errors
                     const customNode = node as CustomNodeObject;
                     

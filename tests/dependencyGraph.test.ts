@@ -1,6 +1,5 @@
 import {
     DependencyGraph,
-    DependencyNode,
 } from '../src/services/dependencyGraph';
 
 describe('DependencyGraph', () => {
@@ -28,7 +27,7 @@ describe('DependencyGraph', () => {
         const consoleSpy = jest
             .spyOn(console, 'log')
             .mockImplementation(() => {});
-        const node = depGraph.addNode('test-package', '1.0.0');
+            depGraph.addNode('test-package', '1.0.0');
         depGraph.logGraph();
 
         expect(consoleSpy).toHaveBeenCalledWith(

@@ -4,6 +4,7 @@ import { watch, ref } from 'vue';
 import { usePackage } from '../stores/selectedPackage';
 import { buildDependencyGraph, DependencyGraph, exportAsGraphData } from '../services/dependencyGraph';
 import ForceGraph from 'force-graph';
+import { NodeObject } from 'force-graph';
 
 const { packageName, packageVersion } = usePackage();
 
@@ -11,6 +12,14 @@ const { packageName, packageVersion } = usePackage();
 const depGraph = ref<DependencyGraph | null>(null);
 const loading = ref(false); // Add a loading state
 const noDependenciesMessage = ref(''); // Ref to hold the message
+
+export interface CustomNodeObject extends NodeObject {
+    isRoot?: boolean;
+    x?: number;
+    y?: number;
+    group?: number;
+    __bckgDimensions?: number[]; // Add any custom properties you need
+}
 
 watch(packageVersion, (newVersion) => {
 
@@ -58,7 +67,9 @@ watch(packageVersion, (newVersion) => {
                 .linkDirectionalArrowLength(4) // Smaller arrows (default is 6)
                 .linkDirectionalArrowRelPos(0.9) // Position arrows in the middle of the link
                 .nodeCanvasObject((node, ctx, globalScale) => {
-                    const label = node.id;
+                    // cast node as CustomNodeObject (which extends force-graph nodeObject) to resolve property DNE errors
+                    const customNode = node as CustomNodeObject;
+                    const label = String(customNode.id);
                     const fontSize = 12 / globalScale; // Scale font size with zoom level
                     ctx.font = `${fontSize}px Sans-Serif`;
 
@@ -68,14 +79,18 @@ watch(packageVersion, (newVersion) => {
                     const bckgDimensions = [textWidth + padding * 2, fontSize + padding * 2];
 
                     // Draw background rectangle with distinct color for root node
-                    if (node.isRoot) {
+                    if (customNode.isRoot) {
                         ctx.fillStyle = 'rgba(153, 255, 204)'; // Green background for root node
                     } else {
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Light background for other nodes
                     }
+
+                    const x = customNode.x ?? 0;
+                    const y = customNode.y ?? 0;
+
                     ctx.fillRect(
-                        node.x - bckgDimensions[0] / 2,
-                        node.y - bckgDimensions[1] / 2,
+                        x - bckgDimensions[0] / 2,
+                        y - bckgDimensions[1] / 2,
                         bckgDimensions[0],
                         bckgDimensions[1]
                     );
@@ -83,21 +98,24 @@ watch(packageVersion, (newVersion) => {
                     // Draw text
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillStyle = node.group === 1 ? 'red' : 'black'; // Change text color for deprecated nodes
+                    ctx.fillStyle = customNode.group === 1 ? 'red' : 'black'; // Change text color for deprecated nodes
 
-                    ctx.fillText(label, node.x, node.y);
+                    ctx.fillText(label, x, y);
 
                     // Save background dimensions for interactivity (optional)
-                    node.__bckgDimensions = bckgDimensions;
+                    customNode.__bckgDimensions = bckgDimensions;
                 })
                 .nodePointerAreaPaint((node, color, ctx) => {
+                    // cast node as CustomNodeObject (which extends force-graph nodeObject) to resolve property DNE errors
+                    const customNode = node as CustomNodeObject;
+                    
                     // Adjust interactivity to account for the padded area
-                    const bckgDimensions = node.__bckgDimensions;
+                    const bckgDimensions = customNode.__bckgDimensions;
                     if (bckgDimensions) {
                         ctx.fillStyle = color;
                         ctx.fillRect(
-                            node.x - bckgDimensions[0] / 2,
-                            node.y - bckgDimensions[1] / 2,
+                            (customNode.x ?? 0) - bckgDimensions[0] / 2,
+                            (customNode.y ?? 0) - bckgDimensions[1] / 2,
                             bckgDimensions[0],
                             bckgDimensions[1]
                         );

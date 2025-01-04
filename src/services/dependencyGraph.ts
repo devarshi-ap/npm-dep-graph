@@ -8,6 +8,7 @@ export class DependencyNode {
     version: string;
     isDeprecated: boolean;
     dependencies: DependencyNode[];
+    isRoot?: boolean; // Add this property
 
     constructor(name: string, version: string, deprecated: boolean = false) {
         this.name = name;
@@ -15,6 +16,11 @@ export class DependencyNode {
         this.isDeprecated = deprecated;
         this.dependencies = [];
     }
+
+    get id(): string {
+        return `${this.name}@${this.version}`;
+    }
+
 }
 
 export class DependencyGraph {

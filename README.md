@@ -6,9 +6,6 @@
         <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Project CI%22">
             <img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Project%20CI/badge.svg" alt="Run Test">
         </a>
-        <a href="#license">
-            <img src="https://img.shields.io/badge/License-MIT-blue" alt="License">
-        </a>
         <p align="center">
             <a href="#key-features">Key Features</a> •
             <a href="#usage">Usage</a> •

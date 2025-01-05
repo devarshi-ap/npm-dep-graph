@@ -80,5 +80,13 @@ npm run test
         </a>
         
 <br>
+<hr>
+
+> #### ⚠️ Project Limitations
+>
+> While this project delivers on its functionality, there are some limitations to consider:
+>
+> -   **Large Dependency Graphs**: Visualizing larger package dependency hierarchies results in slower processing time (due to recursive nature of graph generation) and cluttered graphs (poor docs for `force-graph` library)
+> -   **Simplified Dependency Version Handling**: The NPM registry spits back sem-version ranges (e.g., x@>=1.0.0), so I made a design choice to simplify and resolve the range to the earliest matching version (x@1.0.0). This assumption may not fully reflect real-world dependency resolutions in actual NPM env's, which could lead to discrepancies in the graph.
 
 <div align=center>Made with 💛</div>

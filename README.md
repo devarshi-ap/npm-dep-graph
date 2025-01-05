@@ -15,8 +15,9 @@
             <a href="#tech-specs">Tech Specs</a>
         </p>
     </div>
-    <hr>
 </div>
+
+https://github.com/user-attachments/assets/54d0641e-4319-478e-a0ed-29367366863a
 
 ## ✨ Key Features
 
@@ -34,12 +35,6 @@
 -   **Efficient API Calls**: Minimized API calls using debounce for smooth search and version selection.
 
 -   **Responsive UI**: Intuitive and accessible design, optimized for both desktop and mobile.
-
-## 🌍 Demo
-
-Take a look at the live demo and see it in action:
-
-[Demo Link - View the Dependency Graph](#)
 
 ## 🚀 Technologies Used
 
@@ -86,5 +81,7 @@ npm run test
 <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Project CI%22">
             <img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Project%20CI/badge.svg" alt="Run Test">
         </a>
-<hr>
+        
+<br>
+
 <div align=center>Made with 💛</div>

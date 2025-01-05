@@ -1,84 +1,90 @@
-# NPM Dependency Graph
+<div align="center">
+    <h2>NPM Dependency Graph</h2>
+    <p>A tool to visualize NPM package dependency chains</p>
+    <img src="https://howardzuo.gallerycdn.vsassets.io/extensions/howardzuo/vscode-npm-dependency/1.2.2/1544605671792/Microsoft.VisualStudio.Services.Icons.Default" height=100>
+    <div>
+        <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Project CI%22">
+            <img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Project%20CI/badge.svg" alt="Run Test">
+        </a>
+        <a href="#license">
+            <img src="https://img.shields.io/badge/License-MIT-blue" alt="License">
+        </a>
+        <p align="center">
+            <a href="#key-features">Key Features</a> •
+            <a href="#usage">Usage</a> •
+            <a href="#tech-specs">Tech Specs</a>
+        </p>
+    </div>
+    <hr>
+</div>
 
-<h1 align="center">
-  NPM Dependency Graph
-  <br>
-  banner here
-  <br>
-</h1>
+## ✨ Key Features
 
-<h4 align="center">One liner project overview</h4>
+-   **Interactive Dependency Graph**: Visualize NPM package dependencies with a zoomable + draggable force-directed graph.
 
-<p align="center">
-    <a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Run+Test%22"><img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Project%20CI/badge.svg" alt="Run Test"></a>
-    <a href="#license"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
-</p>
+-   **Package Search & Version Selection**: Search NPM packages and select versions, fetching up-to-date data from the NPM registry.
 
-<p align="center">
-  <a href="#key-features">Key Features</a> •
-  <a href="#usage">Usage</a> •
-  <a href="#tech-specs">Tech Specs</a>
-</p>
+-   **Highlighting Key Information**:
 
-Demo video
+    -   **Root Node**: Easily identifiable with a green background.
+    -   **Deprecated Packages**: Indicated with red text for quick identification.
 
-## Key Features
+-   **Error Handling**: Clear messages for missing packages or empty graphs.
 
--   im getting railed by school work fr
--   but ill still find time to play ball cuz hoop dreams yk
--   why the fuck do I need to know automated first-order-logic formula resolution
--   i spend more time worrying if my vancouver hiking trip will fall thru than my homework
--   i gotta research on this idea to start a company in the little software/tech-in-energy niche sector
+-   **Efficient API Calls**: Minimized API calls using debounce for smooth search and version selection.
 
-## Usage
+-   **Responsive UI**: Intuitive and accessible design, optimized for both desktop and mobile.
 
--   dw cuh, ill drop the tutorial as soon as I fix the gaping issues in the service
+## 🌍 Demo
 
-<br />
+Take a look at the live demo and see it in action:
 
-###### $ Dev. Setup
+[Demo Link - View the Dependency Graph](#)
 
-Ensure [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) are installed on your machine. From your command line:
+## 🚀 Technologies Used
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white" alt="Vue.js"/>
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+    <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
+    <img src="https://img.shields.io/badge/Force%20Graph-D3-FF6F00?style=for-the-badge&logo=d3.js&logoColor=white" alt="Force Graph"/>
+    <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios"/>
+    <img src="https://img.shields.io/badge/Lodash-E9A7B2?style=for-the-badge&logo=lodash&logoColor=black" alt="Lodash"/>
+</div>
+
+-   **Vue.js**: For building an interactive user interface.
+-   **TypeScript**: To ensure type safety and cleaner code.
+-   **Vite**: Fast build tool for modern web apps.
+-   **Force-Graph**: Renders the interactive graph using D3.js' force-directed layout.
+-   **Axios**: Used to fetch package data from the NPM registry.
+-   **Lodash Debounce**: Helps to throttle user input, reducing # API calls.
+
+## 💻 Developer Setup
 
 ```bash
-# Clone this repo
-$ git clone <repo link>
+# 1. Clone the repo
+git clone https://github.com/devarshi-ap/npm-dep-graph.git
+cd npm-dep-graph
 
-# Go into the repo
-$ cd npm-dep-graph
+# 2. Install dependencies
+npm i
 
-# Install dependencies
-$ npm i
+# 3. Whip up dev server
+npm run dev
 
-# Run the dev-server
-$ npm run dev
+# 🧪 Run Jest.js tests (found in /src/tests)
+npm run test
 ```
 
-## Tech Specs
+## 🔄 CI/CD
 
-Here's the toolkit I chose, and my rationale as to why:
+-   The GH workflow ('Project CI') for this project is straightforward, comprising of 2 jobs:
+    1. `Run-Test` - basic env setup + dep install + run test
+    2. `Deploy-Production` - runs strictly upon successful completion of Run-Test; creates production build + deploys using Vercel's CLI
+-   See the below workflow badge to monitor the latest completion status.
 
-<div style="display: inline">
-    <img src="https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white">
-    <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB">
-    <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white">
-    <img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white">
-    <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white">
-</div>
-<br />
-<span>Vue</span>
-<ul>
-    <li>cuz i wanna</li>
-</ul>
-<span>TypeScript</span>
-<ul>
-    <li>cuz i wanna</li>
-</ul>
-<span>Github Actions</span>
-<ul>
-    <li>cuz i wanna</li>
-</ul>
-<span>Docker</span>
-<ul>
-    <li>cuz i gotta (4 da squaw)</li>
-</ul>
+<a href="https://github.com/devarshi-ap/npm-dep-graph/actions?query=workflow:%22Project CI%22">
+            <img src="https://github.com/devarshi-ap/npm-dep-graph/workflows/Project%20CI/badge.svg" alt="Run Test">
+        </a>
+<hr>
+<div align=center>Made with 💛</div>

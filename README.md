@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/54d0641e-4319-478e-a0ed-29367366863a
 
 -   **Highlighting Key Information**:
 
-    -   **Root Node**: Easily identifiable with a green background.
+    -   **Root Node**: Easily identifiable w/ a green background.
     -   **Deprecated Packages**: Indicated with red text for quick identification.
 
 -   **Error Handling**: Clear messages for missing packages or empty graphs.

@@ -2,7 +2,8 @@
 import { watch, ref } from 'vue';
 // import axios from 'axios';
 import { usePackage } from '../stores/selectedPackage';
-import { buildDependencyGraph, DependencyGraph, exportAsGraphData } from '../services/dependencyGraph';
+import { DependencyGraph } from '../services/dependencyGraph';
+import { loadDependencyGraph, GraphStats } from '../services/graphApi';
 import ForceGraph from 'force-graph';
 import { NodeObject } from 'force-graph';
 
@@ -12,6 +13,7 @@ const { packageName, packageVersion } = usePackage();
 const depGraph = ref<DependencyGraph | null>(null);
 const loading = ref(false); // Add a loading state
 const noDependenciesMessage = ref(''); // Ref to hold the message
+const stats = ref<GraphStats | null>(null); // Timing + cache stats from the API
 
 export interface CustomNodeObject extends NodeObject {
     isRoot?: boolean;
@@ -37,16 +39,12 @@ watch(packageVersion, (newVersion) => {
         graphElement.innerHTML = ''; // Clear the graph container
     }
     noDependenciesMessage.value = ''; // Reset the message
+    stats.value = null;
     loading.value = true; // Show the spinner
 
-    buildDependencyGraph(packageName.value, packageVersion.value)
-        .then((result) => {
-            const rootId = `${packageName.value}@${packageVersion.value}`;
-
-            result.nodes.forEach((node) => {
-                node.isRoot = node.id === rootId; // Mark the root node
-            });
-            const d3Data = exportAsGraphData(result.nodes, rootId);
+    loadDependencyGraph(packageName.value, packageVersion.value)
+        .then(({ data: d3Data, stats: graphStats }) => {
+            stats.value = graphStats;
             if (d3Data.nodes.length === 0 || d3Data.links.length === 0) {
                 noDependenciesMessage.value = 'No dependencies found for this package.';
                 return;
@@ -137,6 +135,10 @@ watch(packageVersion, (newVersion) => {
                     }
                 });
             })
+            .catch((err) => {
+                console.error(err);
+                noDependenciesMessage.value = `Failed to build graph: ${err.message}`;
+            })
             .finally(() => {
                 loading.value = false; // Stop loading
             });
@@ -147,6 +149,11 @@ watch(packageVersion, (newVersion) => {
 <template>
     <div id="right-panel">
         <div>{{ packageName }} - {{ packageVersion }}</div>
+        <div v-if="stats" class="graph-stats">
+            {{ stats.nodeCount }} packages in {{ stats.durationMs }} ms ·
+            {{ stats.cacheHits }} cache hits · {{ stats.registryFetches }} registry fetches
+            <span v-if="stats.truncated"> · truncated</span>
+        </div>
         <div id="graph-container">
             <div v-if="loading" class="loading-indicator">
                 <div class="spinner"></div>
@@ -167,6 +174,12 @@ watch(packageVersion, (newVersion) => {
     justify-content: flex-start;
     align-items: center;
     height: 100%; /* Ensure it takes up full height */
+}
+
+.graph-stats {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
 }
 
 #graph-container {

@@ -79,6 +79,17 @@ The Lambda (`server/src/graph.ts`) walks the dependency tree one level at a time
 | `server/` | Lambda handler, graph builder, DynamoDB cache, local dev server and benchmark script. |
 | `infra/` | CDK app defining DynamoDB, Lambda, API Gateway, S3, CloudFront and the GitHub OIDC deploy role. |
 
+### 📈 Performance
+
+Measured against the deployed stack (AWS `us-east-1`) with `npm run bench`, building the graph for `webpack@5.94.0` (80 packages):
+
+| | Server time | End-to-end | Registry fetches | Cache hits |
+| --- | ---: | ---: | ---: | ---: |
+| Cold (cache empty) | 2,531 ms | 3,429 ms | 74 | 2 / 153 |
+| Cached (DynamoDB) | **80 ms** | **158 ms** | **0** | 153 / 153 |
+
+That's **~32× faster** server-side (~22× end to end) once a graph's packages are cached, with zero calls to the npm registry.
+
 ## 💻 Developer Setup
 
 ```bash
